@@ -436,7 +436,6 @@
     }
   };
 
-  /* URL normalization */
   function normalizeSpotifyUrl(raw){
     if (!raw) return null;
     const s = raw.trim();
@@ -464,7 +463,6 @@
     } catch(_) { return null; }
   }
 
-  /* Mount controller inside gate */
   function mountGatePlayer(uri){
     const host = document.getElementById('gateEmbed');
     const wrap = document.getElementById('gatePlayerWrap');
@@ -472,6 +470,7 @@
 
     wrap.hidden = false;
 
+    // Reuse the controller if we already created one (no DOM move, no cut)
     if (gateController) {
       gateController.loadEntity(uri);
       return;
@@ -483,19 +482,21 @@
 
     IFrameAPI.createController(host, { uri, width:'100%', height:152 }, (controller)=>{
       gateController = controller;
+
+      // When the user actually starts playback, collapse gate into mini player.
+      // The iframe stays in place — only CSS changes.
       controller.addListener('playback_started', () => {
         revealSiteFromGate(uri);
       });
     });
   }
 
-  /* Gate closes; player keeps playing inside a floating mini player */
   function revealSiteFromGate(uri){
     if (entered) return;
     entered = true;
 
     document.body.classList.remove('is-gate');
-    moveGateIframeToMini();
+    document.body.classList.add('is-mini');
 
     try {
       localStorage.setItem('jl-gate-passed', '1');
@@ -503,29 +504,16 @@
     } catch(e){}
   }
 
-  /* Move the live iframe to the mini player without losing playback */
-  function moveGateIframeToMini(){
-    const gateEmbed = document.getElementById('gateEmbed');
-    const miniEmbed = document.getElementById('miniEmbed');
-    const miniPlayer = document.getElementById('miniPlayer');
-    if (!gateEmbed || !miniEmbed || !miniPlayer) return;
-
-    const iframe = gateEmbed.querySelector('iframe');
-    if (iframe) miniEmbed.appendChild(iframe);
-
-    miniPlayer.setAttribute('aria-hidden', 'false');
-    miniPlayer.classList.add('is-on');
-  }
-
-  /* Skip -> just close the gate */
   function skipGate(){
     if (entered) return;
     entered = true;
     document.body.classList.remove('is-gate');
+    document.body.classList.add('is-mini');
+    const gate = document.getElementById('gate');
+    if (gate) gate.style.display = 'none';
     try { localStorage.setItem('jl-gate-passed', '1'); } catch(e){}
   }
 
-  /* Independent mount for the in-page Spotify section */
   function mountSpotifySection(uri){
     const host = document.getElementById('spotifyEmbed');
     const wrap = document.getElementById('spotifyPlayerWrap');
@@ -541,13 +529,12 @@
     });
   }
 
-  /* ---------- Spotify init ---------- */
   function initSpotify(){
-    // ---- Gate form ----
     const gateForm = document.getElementById('gateForm');
     const gateInput = document.getElementById('gateInput');
     const gateError = document.getElementById('gateError');
     const gateSkip = document.getElementById('gateSkip');
+    const gateClose = document.getElementById('gateClose');
 
     const showGateError = (msg) => {
       if (!gateError) return;
@@ -555,12 +542,14 @@
       gateError.classList.toggle('is-on', !!msg);
     };
 
-    // If user already passed the gate before, skip it entirely
     let passed = false;
     try { passed = localStorage.getItem('jl-gate-passed') === '1'; } catch(e){}
     if (passed) {
       entered = true;
       document.body.classList.remove('is-gate');
+      document.body.classList.add('is-mini');
+      const gate = document.getElementById('gate');
+      if (gate) gate.style.display = 'none';
     } else {
       document.body.classList.add('is-gate');
     }
@@ -580,15 +569,13 @@
     gateInput?.addEventListener('paste', ()=> setTimeout(()=> gateForm.requestSubmit(), 0));
     gateSkip?.addEventListener('click', skipGate);
 
-    // ---- Mini player close ----
-    const miniClose = document.getElementById('miniClose');
-    const miniPlayer = document.getElementById('miniPlayer');
-    miniClose?.addEventListener('click', ()=>{
-      miniPlayer?.classList.remove('is-on');
-      miniPlayer?.setAttribute('aria-hidden', 'true');
+    // Close button only appears in mini mode
+    gateClose?.addEventListener('click', ()=>{
+      const gate = document.getElementById('gate');
+      if (gate) gate.style.display = 'none';
     });
 
-    // ---- In-page Spotify section ----
+    // In-page Spotify section
     const form = document.getElementById('spotifyForm');
     const input = document.getElementById('spotifyInput');
     const errorEl = document.getElementById('spotifyError');
