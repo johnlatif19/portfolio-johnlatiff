@@ -93,23 +93,70 @@ body:not(.is-loading) .loader{
   pointer-events:none;
 }
 
-/* ================= GATE (Spotify entry) ================= */
+/* ================= GATE (overlay + mini player) ================= */
 .gate{
-  position:fixed;inset:0;z-index:10000;
+  position:fixed;
+  inset:0;
+  z-index:10000;
   background:var(--bg);
   color:var(--ink);
-  display:grid;place-items:center;
+  display:grid;
+  place-items:center;
   padding:clamp(20px,4vw,60px);
-  clip-path:inset(0 0 0 0);
-  transition:clip-path .9s var(--ease-out), opacity .6s ease;
+  overflow:hidden;
+  transition:
+    padding .7s var(--ease-out),
+    background .5s ease;
 }
-body.is-ready:not(.is-gate) .gate{
-  clip-path:inset(0 0 100% 0);
-  opacity:0;
+body:not(.is-ready) .gate{opacity:0;pointer-events:none}
+
+/* When mini mode is active, gate collapses to bottom corner */
+body.is-mini .gate{
+  inset:auto 20px 20px 20px;      /* default: bottom-left visual in LTR */
+  padding:0;
+  background:transparent;
+  z-index:9500;
   pointer-events:none;
 }
-body.is-ready.is-gate .gate{opacity:1}
+[dir="rtl"] body.is-mini .gate{
+  inset:auto 20px 20px auto;       /* bottom-right in RTL */
+}
 
+/* When mini, hide everything inside gate except the player */
+body.is-mini .gate__skip,
+body.is-mini .gate__brand,
+body.is-mini .gate__content > .gate__kicker,
+body.is-mini .gate__content > .gate__title,
+body.is-mini .gate__content > .gate__sub,
+body.is-mini .gate__form,
+body.is-mini .gate__hint{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+
+/* In mini mode the inner block becomes a small floating card */
+body.is-mini .gate__inner{
+  display:block;
+  width:min(340px, calc(100vw - 40px));
+  padding:0;
+}
+body.is-mini .gate__content{padding:0}
+body.is-mini .gate__player{
+  pointer-events:auto;
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.55);
+  animation:miniIn .5s var(--ease-out);
+}
+@keyframes miniIn{
+  from{opacity:0;transform:translateY(20px) scale(.95)}
+  to{opacity:1;transform:none}
+}
+
+/* Non-mini gate layout */
 .gate__skip{
   position:absolute;
   top:clamp(20px,3vw,32px);
@@ -180,7 +227,6 @@ body.is-ready.is-gate .gate{opacity:1}
   max-width:52ch;
 }
 
-/* gate form */
 .gate__form-wrap{display:flex;flex-direction:column;gap:14px;margin-top:8px}
 .gate__form{display:flex;flex-direction:column;gap:10px}
 .gate__field{
@@ -236,6 +282,31 @@ body.is-ready.is-gate .gate{opacity:1}
   animation:fadeUp .5s var(--ease-out);
 }
 .gate__player[hidden]{display:none}
+.gate__player-head{
+  display:none;
+  align-items:center;justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+}
+body.is-mini .gate__player-head{display:flex}
+.gate__now-playing{
+  font-family:var(--font-en);
+  font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.gate__close{
+  width:26px;height:26px;border-radius:50%;
+  border:1px solid var(--line);
+  display:grid;place-items:center;
+  font-size:11px;
+  color:var(--ink-soft);
+  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease);
+}
+.gate__close:hover{
+  background:var(--accent);color:var(--bg);border-color:var(--accent);
+  transform:rotate(90deg);
+}
 .gate__embed{padding:6px}
 .gate__embed iframe{display:block;width:100%;border:0;border-radius:8px}
 .gate__hint{
@@ -250,67 +321,6 @@ body.is-ready.is-gate .gate{opacity:1}
   from{opacity:0;transform:translateY(20px)}
   to{opacity:1;transform:none}
 }
-
-/* ================= MINI PLAYER ================= */
-.mini-player{
-  position:fixed;
-  bottom:20px;
-  inset-inline-start:20px;
-  z-index:9000;
-  width:min(340px, calc(100vw - 40px));
-  background:var(--bg-2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-  opacity:0;
-  transform:translateY(30px) scale(.96);
-  pointer-events:none;
-  transition:opacity .5s var(--ease-out), transform .6s var(--ease-out);
-}
-.mini-player.is-on{
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
-}
-.mini-player__head{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 14px;
-  border-bottom:1px solid var(--line);
-}
-.mini-player__dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--accent);
-  position:relative;
-  flex:0 0 auto;
-}
-.mini-player__dot::after{
-  content:"";position:absolute;inset:-4px;border-radius:50%;
-  background:var(--accent);opacity:.4;
-  animation:pulse 2s ease-out infinite;
-}
-@keyframes pulse{0%{transform:scale(.6);opacity:.6}100%{transform:scale(2.2);opacity:0}}
-.mini-player__label{
-  font-family:var(--font-en);
-  font-size:11px;letter-spacing:.22em;
-  text-transform:uppercase;
-  color:var(--muted);
-  flex:1;
-}
-.mini-player__close{
-  width:26px;height:26px;border-radius:50%;
-  border:1px solid var(--line);
-  display:grid;place-items:center;
-  font-size:11px;
-  color:var(--ink-soft);
-  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease);
-}
-.mini-player__close:hover{
-  background:var(--accent);color:var(--bg);border-color:var(--accent);
-  transform:rotate(90deg);
-}
-.mini-player__embed{padding:6px}
-.mini-player__embed iframe{display:block;width:100%;border:0;border-radius:8px}
 
 /* ================= CURSOR ================= */
 .cursor{
@@ -570,6 +580,7 @@ body.is-ready.is-gate .gate{opacity:1}
   background:#39c07a;opacity:.4;
   animation:pulse 2s ease-out infinite;
 }
+@keyframes pulse{0%{transform:scale(.6);opacity:.6}100%{transform:scale(2.2);opacity:0}}
 
 .hero__name{
   font-family:var(--font-en);
@@ -1188,7 +1199,6 @@ body.is-ready .hero__visual-reveal{transform:scaleY(0)}
   .marquee__track{animation:none}
   .hero__scroll-line::after{animation:none}
   .hero__status .dot::after{animation:none}
-  .mini-player__dot::after{animation:none}
 }
 
 ::selection{background:var(--accent);color:var(--bg)}
