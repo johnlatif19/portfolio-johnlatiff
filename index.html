@@ -14,7 +14,15 @@
 </head>
 <body class="is-loading">
 
-<!-- ===== ENTRY OVERLAY (Spotify Gate) ===== -->
+<!-- ===== LOADER ===== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <span class="loader__mark" data-text="JL">JL</span>
+    <span class="loader__line"></span>
+  </div>
+</div>
+
+<!-- ===== ENTRY GATE (turns into mini player after play) ===== -->
 <div class="gate" id="gate" aria-hidden="true">
   <button class="gate__skip" id="gateSkip" type="button" aria-label="Skip">
     <span data-i18n="gate.skip">تخطَّ</span>
@@ -26,9 +34,9 @@
 
     <div class="gate__content">
       <p class="gate__kicker" data-i18n="gate.kicker">قبل ما تدخل</p>
-      <h2 class="gate__title" data-i18n="gate.title">اختار حاجة تسمعها وإنت بتتصفح.</h2>
+      <h2 class="gate__title" data-i18n="gate.title">حط لينك أغنية من Spotify.</h2>
       <p class="gate__sub" data-i18n="gate.sub">
-        شغّل أي حاجة من Spotify وهنخليها في الكورنر وإنت بتتصفح. أو دوس تخطَّ.
+        الصق لينك أي أغنية أو ألبوم من Spotify، شغّلها، وهنخليها معاك وإنت بتتصفح. أو دوس تخطَّ.
       </p>
 
       <div class="gate__form-wrap">
@@ -52,6 +60,10 @@
         </form>
 
         <div class="gate__player" id="gatePlayerWrap" hidden>
+          <div class="gate__player-head" id="gatePlayerHead" hidden>
+            <span class="gate__now-playing" data-i18n="mini.now">بيشتغل الآن</span>
+            <button type="button" class="gate__close" id="gateClose" aria-label="Close">✕</button>
+          </div>
           <div id="gateEmbed" class="gate__embed"></div>
           <p class="gate__hint" id="gateHint" data-i18n="gate.hint">
             دوس play جوه المشغل وابدأ رحلتك.
@@ -59,24 +71,6 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ===== MINI PLAYER (persists after entry) ===== -->
-<div class="mini-player" id="miniPlayer" aria-hidden="true">
-  <div class="mini-player__head">
-    <span class="mini-player__dot"></span>
-    <span class="mini-player__label" data-i18n="mini.now">بيشتغل الآن</span>
-    <button type="button" class="mini-player__close" id="miniClose" aria-label="Close">✕</button>
-  </div>
-  <div id="miniEmbed" class="mini-player__embed"></div>
-</div>
-
-<!-- ===== LOADER (JL intro) ===== -->
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__inner">
-    <span class="loader__mark" data-text="JL">JL</span>
-    <span class="loader__line"></span>
   </div>
 </div>
 
