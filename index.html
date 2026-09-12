@@ -6,7 +6,6 @@
 <title>John Latif — Front-End Developer</title>
 <meta name="description" content="John Latif — Front-End Developer & Web Developer. أصمم تجارب ويب تفاعلية." />
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet">
@@ -15,7 +14,65 @@
 </head>
 <body class="is-loading">
 
-<!-- ===== LOADER ===== -->
+<!-- ===== ENTRY OVERLAY (Spotify Gate) ===== -->
+<div class="gate" id="gate" aria-hidden="true">
+  <button class="gate__skip" id="gateSkip" type="button" aria-label="Skip">
+    <span data-i18n="gate.skip">تخطَّ</span>
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+
+  <div class="gate__inner">
+    <div class="gate__brand" aria-hidden="true">JL</div>
+
+    <div class="gate__content">
+      <p class="gate__kicker" data-i18n="gate.kicker">قبل ما تدخل</p>
+      <h2 class="gate__title" data-i18n="gate.title">اختار حاجة تسمعها وإنت بتتصفح.</h2>
+      <p class="gate__sub" data-i18n="gate.sub">
+        شغّل أي حاجة من Spotify وهنخليها في الكورنر وإنت بتتصفح. أو دوس تخطَّ.
+      </p>
+
+      <div class="gate__form-wrap">
+        <form class="gate__form" id="gateForm" novalidate>
+          <div class="gate__field">
+            <input
+              type="text"
+              id="gateInput"
+              class="gate__input"
+              placeholder="https://open.spotify.com/track/..."
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Spotify link"
+            />
+            <button type="submit" class="gate__submit" aria-label="Load">
+              <span data-i18n="gate.load">شغّل</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <p class="gate__error" id="gateError" role="alert" aria-live="polite"></p>
+        </form>
+
+        <div class="gate__player" id="gatePlayerWrap" hidden>
+          <div id="gateEmbed" class="gate__embed"></div>
+          <p class="gate__hint" id="gateHint" data-i18n="gate.hint">
+            دوس play جوه المشغل وابدأ رحلتك.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MINI PLAYER (persists after entry) ===== -->
+<div class="mini-player" id="miniPlayer" aria-hidden="true">
+  <div class="mini-player__head">
+    <span class="mini-player__dot"></span>
+    <span class="mini-player__label" data-i18n="mini.now">بيشتغل الآن</span>
+    <button type="button" class="mini-player__close" id="miniClose" aria-label="Close">✕</button>
+  </div>
+  <div id="miniEmbed" class="mini-player__embed"></div>
+</div>
+
+<!-- ===== LOADER (JL intro) ===== -->
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
     <span class="loader__mark" data-text="JL">JL</span>
@@ -191,7 +248,6 @@
 
   <div class="projects">
 
-    <!-- Project 01 -->
     <article class="project" data-project>
       <div class="project__sticky">
         <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
@@ -217,7 +273,6 @@
       </div>
     </article>
 
-    <!-- Project 02 -->
     <article class="project project--alt" data-project>
       <div class="project__sticky">
         <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
@@ -243,7 +298,6 @@
       </div>
     </article>
 
-    <!-- Project 03 -->
     <article class="project" data-project>
       <div class="project__sticky">
         <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
@@ -309,7 +363,6 @@
     </div>
   </div>
 
-  <!-- floating preview element driven by JS -->
   <div class="skills__preview" id="skillPreview" aria-hidden="true">
     <span class="skills__preview-text" id="skillPreviewText"></span>
   </div>
@@ -340,9 +393,7 @@
         />
         <button type="submit" class="spotify__submit" aria-label="Load">
           <span data-i18n="spotify.load">شغّل</span>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
       <p class="spotify__hint" data-i18n="spotify.hint">
