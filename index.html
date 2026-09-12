@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>John Latif — Front-End Developer</title>
+<meta name="description" content="John Latif — Front-End Developer & Web Developer. أصمم تجارب ويب تفاعلية." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="is-loading">
+
+<!-- ===== LOADER ===== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <span class="loader__mark" data-text="JL">JL</span>
+    <span class="loader__line"></span>
+  </div>
+</div>
+
+<!-- ===== CUSTOM CURSOR ===== -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring">
+    <span class="cursor__label" id="cursorLabel"></span>
+  </div>
+</div>
+
+<!-- ===== SCROLL PROGRESS ===== -->
+<div class="scroll-progress" aria-hidden="true">
+  <div class="scroll-progress__bar" id="scrollBar"></div>
+</div>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <a href="#home" class="nav__brand" aria-label="John Latif">
+    <span class="nav__brand-mark">JL</span>
+    <span class="nav__brand-name">John&nbsp;Latif</span>
+  </a>
+
+  <nav class="nav__links" aria-label="Main">
+    <a href="#home" data-nav="home"><span data-i18n="nav.home">الرئيسية</span></a>
+    <a href="#about" data-nav="about"><span data-i18n="nav.about">عني</span></a>
+    <a href="#work" data-nav="work"><span data-i18n="nav.work">أعمالي</span></a>
+    <a href="#skills" data-nav="skills"><span data-i18n="nav.skills">مهاراتي</span></a>
+    <a href="#spotify" data-nav="spotify"><span data-i18n="nav.spotify">موسيقى</span></a>
+    <a href="#contact" data-nav="contact"><span data-i18n="nav.contact">تواصل معي</span></a>
+    <span class="nav__indicator" id="navIndicator"></span>
+  </nav>
+
+  <div class="nav__actions">
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+      <span class="lang-toggle__ar">AR</span>
+      <span class="lang-toggle__sep">/</span>
+      <span class="lang-toggle__en">EN</span>
+    </button>
+    <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== MOBILE MENU ===== -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <nav>
+    <a href="#home" data-nav="home"><span data-i18n="nav.home">الرئيسية</span></a>
+    <a href="#about" data-nav="about"><span data-i18n="nav.about">عني</span></a>
+    <a href="#work" data-nav="work"><span data-i18n="nav.work">أعمالي</span></a>
+    <a href="#skills" data-nav="skills"><span data-i18n="nav.skills">مهاراتي</span></a>
+    <a href="#spotify" data-nav="spotify"><span data-i18n="nav.spotify">موسيقى</span></a>
+    <a href="#contact" data-nav="contact"><span data-i18n="nav.contact">تواصل معي</span></a>
+  </nav>
+  <div class="mobile-menu__meta">
+    <span>John Latif — Front-End Dev</span>
+    <span>©<span id="yearM"></span></span>
+  </div>
+</div>
+
+<main>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__bg-blob" data-parallax="0.06"></div>
+    <div class="hero__bg-grid"></div>
+    <div class="hero__bg-tag" data-parallax="-0.03">PORTFOLIO / 2025</div>
+    <div class="hero__bg-tag hero__bg-tag--r" data-parallax="0.04">FRONT-END / WEB</div>
+  </div>
+
+  <div class="hero__grid">
+    <div class="hero__content">
+      <div class="hero__status" data-hero="1">
+        <span class="dot"></span>
+        <span data-i18n="hero.status">متاح للعمل</span>
+      </div>
+
+      <h1 class="hero__name" aria-label="John Latif">
+        <span class="line"><span class="word" data-hero="2">John</span></span>
+        <span class="line"><span class="word word--outline" data-hero="3">Latif</span></span>
+      </h1>
+
+      <p class="hero__role" data-hero="4" data-i18n="hero.role">
+        مطور واجهة أمامية و مطور ويب
+      </p>
+
+      <h2 class="hero__headline" data-hero="5">
+        <span data-i18n="hero.headline">أصمم تجارب ممتعة وسهلة الاستخدام.</span>
+      </h2>
+
+      <p class="hero__para" data-hero="6" data-i18n="hero.para">
+        أصمم تجارب ويب تفاعلية وتطبيقات واقعية تركز على الأداء وسهولة الاستخدام.
+      </p>
+
+      <div class="hero__cta" data-hero="7">
+        <a href="#work" class="btn btn--primary magnetic" data-cursor="link">
+          <span data-i18n="hero.ctaWork">شوف أعمالي</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#contact" class="btn btn--ghost magnetic" data-cursor="link">
+          <span data-i18n="hero.ctaContact">تواصل معي</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="false">
+      <div class="hero__visual-frame" data-parallax="0.02">
+        <div class="hero__visual-tape" data-parallax="-0.04">JL — 001</div>
+        <div class="hero__visual-img" id="heroImg">
+          <img src="https://i.postimg.cc/yxqvWq2f/DSC-7841.jpg" alt="John Latif — Front-End Developer" loading="eager" />
+          <div class="hero__visual-grain"></div>
+          <div class="hero__visual-reveal"></div>
+        </div>
+        <div class="hero__visual-border"></div>
+        <div class="hero__visual-meta">
+          <span>Front-End</span>
+          <span>Web&nbsp;Developer</span>
+          <span>Cairo, EG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span data-i18n="hero.scroll">اسكرول</span>
+    <span class="hero__scroll-line"></span>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>FRONT-END ✦ WEB DEVELOPER ✦ REACT ✦ TYPESCRIPT ✦ THREE.JS ✦ INTERACTIVE ✦</span>
+    <span>FRONT-END ✦ WEB DEVELOPER ✦ REACT ✦ TYPESCRIPT ✦ THREE.JS ✦ INTERACTIVE ✦</span>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section class="about" id="about">
+  <div class="section-head">
+    <span class="section-head__index">01</span>
+    <h2 class="section-head__title" data-i18n="about.title">عني</h2>
+    <span class="section-head__rule"></span>
+  </div>
+
+  <div class="about__grid">
+    <p class="about__lead" data-reveal-words>
+      <span data-i18n="about.text">أنا شخص طموح وشغوف بالتعلّم والتطوير المستمر، وأسعى دائمًا إلى اكتساب مهارات جديدة وتحويل المعرفة إلى تطبيق عملي. أحب التفكير بطريقة مختلفة، الاهتمام بالتفاصيل، وتطوير الأفكار للوصول إلى نتائج أفضل. أؤمن بأهمية التطور المستمر، وأحرص على أن يكون لكل مشروع أعمل عليه قيمة حقيقية تعكس مهاراتي وشغفي بما أقدمه.</span>
+    </p>
+
+    <ul class="about__tags">
+      <li data-scroll-tag><span data-i18n="about.tag1">Web Design</span></li>
+      <li data-scroll-tag><span data-i18n="about.tag2">بناء الهياكل</span></li>
+      <li data-scroll-tag><span data-i18n="about.tag3">تجارب تفاعلية</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== WORK ===== -->
+<section class="work" id="work">
+  <div class="section-head">
+    <span class="section-head__index">02</span>
+    <h2 class="section-head__title" data-i18n="work.title">أعمالي</h2>
+    <span class="section-head__rule"></span>
+  </div>
+  <p class="section-sub" data-i18n="work.sub">مجموعة من المشاريع التي تعرض مهاراتي وأسلوبي في التطوير</p>
+
+  <div class="projects">
+
+    <!-- Project 01 -->
+    <article class="project" data-project>
+      <div class="project__sticky">
+        <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
+          <div class="project__media-inner">
+            <img src="https://i.postimg.cc/B6Tz00JP/shulamith-gallery.jpg" alt="شولميث جاليري" loading="lazy" />
+          </div>
+          <div class="project__media-reveal"></div>
+        </div>
+
+        <div class="project__info">
+          <span class="project__num" data-project-num>01</span>
+          <h3 class="project__title" data-project-title data-i18n="work.p1.title">شولميث جاليري</h3>
+          <p class="project__desc" data-project-desc data-i18n="work.p1.desc">
+            منصة فنية لعرض وبيع اللوحات الفنية، مع إمكانية تنفيذ أي تابلوه بخامات وأحجام مختلفة حسب طلب العميل، وتقديم استشارات فنية مجانية.
+          </p>
+          <ul class="project__stack" data-project-stack>
+            <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>Express</li>
+          </ul>
+          <a href="https://shulamith-gallery.vercel.app/" target="_blank" rel="noopener" class="project__link magnetic" data-cursor="link" data-i18n="work.live">
+            Live Demo ↗
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Project 02 -->
+    <article class="project project--alt" data-project>
+      <div class="project__sticky">
+        <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
+          <div class="project__media-inner">
+            <img src="https://i.postimg.cc/mrMXYszD/points-dr-mirna.jpg" alt="نظام نقاط لصيدلية د. ميرنا" loading="lazy" />
+          </div>
+          <div class="project__media-reveal"></div>
+        </div>
+
+        <div class="project__info">
+          <span class="project__num" data-project-num>02</span>
+          <h3 class="project__title" data-project-title data-i18n="work.p2.title">نظام نقاط لصيدلية د. ميرنا</h3>
+          <p class="project__desc" data-project-desc data-i18n="work.p2.desc">
+            نظام متكامل لإدارة نقاط الولاء لعملاء صيدلية د. ميرنا، يتيح جمع النقاط مع كل عملية شراء واستبدالها بمكافآت وعروض حصرية.
+          </p>
+          <ul class="project__stack" data-project-stack>
+            <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>Express</li>
+          </ul>
+          <a href="https://points-dr-mirna.vercel.app/" target="_blank" rel="noopener" class="project__link magnetic" data-cursor="link" data-i18n="work.live">
+            Live Demo ↗
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Project 03 -->
+    <article class="project" data-project>
+      <div class="project__sticky">
+        <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
+          <div class="project__media-inner">
+            <img src="https://i.postimg.cc/6QRjrX2h/login.jpg" alt="نظام تسجيل الدخول" loading="lazy" />
+          </div>
+          <div class="project__media-reveal"></div>
+        </div>
+
+        <div class="project__info">
+          <span class="project__num" data-project-num>03</span>
+          <h3 class="project__title" data-project-title data-i18n="work.p3.title">نظام تسجيل الدخول</h3>
+          <p class="project__desc" data-project-desc data-i18n="work.p3.desc">
+            نظام تسجيل دخول تجريبي بسيط وآمن مع واجهة مستخدم نظيفة، يتيح للمستخدمين تسجيل الدخول باستخدام اسم المستخدم وكلمة المرور.
+          </p>
+          <ul class="project__stack" data-project-stack>
+            <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>Express</li>
+          </ul>
+          <a href="https://login-test-john.vercel.app/" target="_blank" rel="noopener" class="project__link magnetic" data-cursor="link" data-i18n="work.live">
+            Live Demo ↗
+          </a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section class="skills" id="skills">
+  <div class="section-head">
+    <span class="section-head__index">03</span>
+    <h2 class="section-head__title" data-i18n="skills.title">مهاراتي</h2>
+    <span class="section-head__rule"></span>
+  </div>
+  <p class="section-sub" data-i18n="skills.sub">التقنيات التي أعمل بها لإنشاء تجارب رقمية استثنائية</p>
+
+  <div class="skills__wrap">
+    <div class="skills__col">
+      <h4 class="skills__col-title" data-i18n="skills.core">المهارات الأساسية</h4>
+      <ul class="skills__list" data-skills-list>
+        <li class="skill" data-skill="react"><span class="skill__name">React</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="ts"><span class="skill__name">TypeScript</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="js"><span class="skill__name">JavaScript</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="html"><span class="skill__name">HTML5</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="css"><span class="skill__name">CSS3</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="tw"><span class="skill__name">Tailwind</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="git"><span class="skill__name">Git</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="gh"><span class="skill__name">GitHub</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="rest"><span class="skill__name">REST APIs</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+        <li class="skill" data-skill="vite"><span class="skill__name">Vite</span><span class="skill__hint" aria-hidden="true">↗</span></li>
+      </ul>
+    </div>
+
+    <div class="skills__col">
+      <h4 class="skills__col-title" data-i18n="skills.creative">التقنيات الإبداعية</h4>
+      <ul class="skills__list" data-skills-list>
+        <li class="skill skill--3d" data-skill="three"><span class="skill__name">Three.js</span><span class="skill__hint" aria-hidden="true">◇</span></li>
+        <li class="skill skill--3d" data-skill="r3f"><span class="skill__name">React Three Fiber</span><span class="skill__hint" aria-hidden="true">◇</span></li>
+        <li class="skill skill--3d" data-skill="drei"><span class="skill__name">@react-three/drei</span><span class="skill__hint" aria-hidden="true">◇</span></li>
+        <li class="skill skill--motion" data-skill="fm"><span class="skill__name">Framer Motion</span><span class="skill__hint" aria-hidden="true">→</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- floating preview element driven by JS -->
+  <div class="skills__preview" id="skillPreview" aria-hidden="true">
+    <span class="skills__preview-text" id="skillPreviewText"></span>
+  </div>
+</section>
+
+<!-- ===== SPOTIFY ===== -->
+<section class="spotify" id="spotify">
+  <div class="section-head">
+    <span class="section-head__index">04</span>
+    <h2 class="section-head__title" data-i18n="spotify.title">اسمع وإنت بتتصفح</h2>
+    <span class="section-head__rule"></span>
+  </div>
+  <p class="section-sub" data-i18n="spotify.sub">
+    الصق لينك أي أغنية أو ألبوم أو بودكاست من Spotify، وهيشتغل هنا فورًا.
+  </p>
+
+  <div class="spotify__wrap">
+    <form class="spotify__form" id="spotifyForm" novalidate>
+      <div class="spotify__field">
+        <input
+          type="text"
+          id="spotifyInput"
+          class="spotify__input"
+          placeholder="https://open.spotify.com/track/..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Spotify link"
+        />
+        <button type="submit" class="spotify__submit" aria-label="Load">
+          <span data-i18n="spotify.load">شغّل</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+      <p class="spotify__hint" data-i18n="spotify.hint">
+        يقبل روابط track / album / playlist / episode / show
+      </p>
+      <p class="spotify__error" id="spotifyError" role="alert" aria-live="polite"></p>
+    </form>
+
+    <div class="spotify__player-wrap" id="spotifyPlayerWrap" hidden>
+      <div class="spotify__player-head">
+        <span class="spotify__now-playing" data-i18n="spotify.now">بيشتغل الآن</span>
+        <button type="button" class="spotify__close" id="spotifyClose" aria-label="Close">✕</button>
+      </div>
+      <div id="spotifyEmbed" class="spotify__embed"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact" id="contact">
+  <div class="contact__headline" data-reveal-words>
+    <span data-i18n="contact.headline">خلينا نبني حاجة تستحق إنها تتشاف.</span>
+  </div>
+
+  <div class="contact__meta">
+    <div class="contact__id">
+      <h3 data-i18n="contact.name">جون لطيف</h3>
+      <p data-i18n="contact.role">مطور واجهة امامية و مطور ويب و واجهة خلفية</p>
+      <p data-i18n="contact.location">مصر</p>
+    </div>
+
+    <ul class="contact__list">
+      <li>
+        <a href="tel:01274445091" class="contact__link magnetic" data-cursor="link">
+          <span class="contact__label" data-i18n="contact.phone">الهاتف</span>
+          <span class="contact__val" dir="ltr">01274445091</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://wa.me/201274445091" target="_blank" rel="noopener" class="contact__link magnetic" data-cursor="link">
+          <span class="contact__label">WhatsApp</span>
+          <span class="contact__val" dir="ltr">wa.me/johnlatiff</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.facebook.com/john.latif.5815" target="_blank" rel="noopener" class="contact__link magnetic" data-cursor="link">
+          <span class="contact__label">Facebook</span>
+          <span class="contact__val" dir="ltr">john.latif.5815</span>
+        </a>
+      </li>
+      <li>
+        <a href="mailto:johnlatif37@gmail.com" class="contact__link magnetic" data-cursor="link">
+          <span class="contact__label">Email</span>
+          <span class="contact__val" dir="ltr">johnlatif37@gmail.com</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> John Latif</span>
+    <span data-i18n="footer.built">Built with care — no templates.</span>
+    <a href="#home" class="footer__top" data-i18n="footer.top">↑ للأعلى</a>
+  </footer>
+</section>
+
+</main>
+
+<!-- Spotify iFrame API SDK -->
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+<script src="script.js"></script>
+</body>
+</html>
