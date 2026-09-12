@@ -16,6 +16,12 @@
       'hero.headline':'أصمم تجارب ممتعة وسهلة الاستخدام.',
       'hero.para':'أصمم تجارب ويب تفاعلية وتطبيقات واقعية تركز على الأداء وسهولة الاستخدام.',
       'hero.ctaWork':'شوف أعمالي','hero.ctaContact':'تواصل معي','hero.scroll':'اسكرول',
+      'gate.skip':'تخطَّ','gate.kicker':'قبل ما تدخل',
+      'gate.title':'اختار حاجة تسمعها وإنت بتتصفح.',
+      'gate.sub':'شغّل أي حاجة من Spotify وهنخليها في الكورنر وإنت بتتصفح. أو دوس تخطَّ.',
+      'gate.load':'شغّل',
+      'gate.hint':'دوس play جوه المشغل وابدأ رحلتك.',
+      'gate.error':'الرابط مش صحيح. لازم يكون رابط Spotify.',
       'about.title':'عني',
       'about.text':'أنا شخص طموح وشغوف بالتعلّم والتطوير المستمر، وأسعى دائمًا إلى اكتساب مهارات جديدة وتحويل المعرفة إلى تطبيق عملي. أحب التفكير بطريقة مختلفة، الاهتمام بالتفاصيل، وتطوير الأفكار للوصول إلى نتائج أفضل. أؤمن بأهمية التطور المستمر، وأحرص على أن يكون لكل مشروع أعمل عليه قيمة حقيقية تعكس مهاراتي وشغفي بما أقدمه.',
       'about.tag1':'Web Design','about.tag2':'بناء الهياكل','about.tag3':'تجارب تفاعلية',
@@ -35,6 +41,7 @@
       'spotify.hint':'يقبل روابط track / album / playlist / episode / show',
       'spotify.now':'بيشتغل الآن',
       'spotify.error':'الرابط مش صحيح. لازم يكون رابط Spotify.',
+      'mini.now':'بيشتغل الآن',
       'contact.headline':'خلينا نبني حاجة تستحق إنها تتشاف.',
       'contact.name':'جون لطيف','contact.role':'مطور واجهة امامية و مطور ويب و واجهة خلفية','contact.location':'مصر',
       'contact.phone':'الهاتف',
@@ -46,6 +53,12 @@
       'hero.headline':'I craft delightful, usable experiences.',
       'hero.para':'I build interactive web experiences and real-world applications focused on performance and usability.',
       'hero.ctaWork':'View my work','hero.ctaContact':'Get in touch','hero.scroll':'Scroll',
+      'gate.skip':'Skip','gate.kicker':'Before you enter',
+      'gate.title':'Pick something to play while you browse.',
+      'gate.sub':'Load any Spotify track and we\'ll keep it in the corner while you scroll. Or hit skip.',
+      'gate.load':'Play',
+      'gate.hint':'Hit play inside the player and start your journey.',
+      'gate.error':'Invalid link. Must be a Spotify URL.',
       'about.title':'About',
       'about.text':"I'm an ambitious developer passionate about continuous learning and growth, always striving to gain new skills and turn knowledge into practice. I like thinking differently, obsessing over details, and pushing ideas further. I believe in constant evolution, and I make sure every project I work on carries real value that reflects my skills and passion.",
       'about.tag1':'Web Design','about.tag2':'Architecture','about.tag3':'Interactive experiences',
@@ -65,6 +78,7 @@
       'spotify.hint':'Accepts track / album / playlist / episode / show links',
       'spotify.now':'Now playing',
       'spotify.error':'Invalid link. Must be a Spotify URL.',
+      'mini.now':'Now playing',
       'contact.headline':"Let's build something memorable.",
       'contact.name':'John Latif','contact.role':'Front-End, Web & Back-End Developer','contact.location':'Egypt',
       'contact.phone':'Phone',
@@ -86,51 +100,48 @@
     observeWordReveals();
   }
 
-  /* ---------- Init Loader ---------- */
+  /* ---------- Loader ---------- */
   function initLoader(){
-    window.addEventListener('load', () => {
-      setTimeout(()=>{
-        document.body.classList.remove('is-loading');
-        document.body.classList.add('is-ready');
-      }, prefersReduced ? 0 : 900);
-    });
-    setTimeout(()=>{
+    // Hide the JL loader after a short beat
+    const done = () => {
       document.body.classList.remove('is-loading');
-      document.body.classList.add('is-ready');
-    }, 2600);
+    };
+    if (document.readyState === 'complete') {
+      setTimeout(done, prefersReduced ? 0 : 1200);
+    } else {
+      window.addEventListener('load', ()=> setTimeout(done, prefersReduced ? 0 : 1200));
+    }
+    setTimeout(done, 2600); // safety fallback
   }
 
-  /* ---------- Custom Cursor ---------- */
+  /* ---------- Cursor ---------- */
   function initCursor(){
     if(isTouch) return;
     const cursor = document.getElementById('cursor');
     const label  = document.getElementById('cursorLabel');
     if(!cursor) return;
-
     const dot  = cursor.querySelector('.cursor__dot');
     const ring = cursor.querySelector('.cursor__ring');
 
-    let mx = window.innerWidth/2, my = window.innerHeight/2;
-    let rx = mx, ry = my;
-    let dx = mx, dy = my;
+    let mx = innerWidth/2, my = innerHeight/2;
+    let rx = mx, ry = my, dx = mx, dy = my;
 
     window.addEventListener('mousemove', (e)=>{
       mx = e.clientX; my = e.clientY;
-      dx += (mx - dx) * 0.55;
-      dy += (my - dy) * 0.55;
+      dx += (mx - dx) * .55;
+      dy += (my - dy) * .55;
       dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%,-50%)`;
     }, {passive:true});
 
     const loop = () => {
-      rx += (mx - rx) * 0.14;
-      ry += (my - ry) * 0.14;
+      rx += (mx - rx) * .14;
+      ry += (my - ry) * .14;
       ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
 
-    const targets = document.querySelectorAll('[data-cursor="view"], [data-cursor="link"], a, button');
-    targets.forEach(el=>{
+    document.querySelectorAll('[data-cursor="view"], [data-cursor="link"], a, button').forEach(el=>{
       const kind = el.dataset.cursor;
       el.addEventListener('mouseenter', ()=>{
         if(kind === 'view'){
@@ -157,9 +168,7 @@
     const burger = document.getElementById('burger');
     const menu = document.getElementById('mobileMenu');
 
-    const onScroll = () => {
-      nav.classList.toggle('is-scrolled', window.scrollY > 30);
-    };
+    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 30);
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
 
@@ -212,11 +221,10 @@
     });
   }
 
-  /* ---------- Magnetic buttons ---------- */
+  /* ---------- Magnetic ---------- */
   function initMagnetic(){
     if(isTouch || prefersReduced) return;
-    const mags = document.querySelectorAll('.magnetic');
-    mags.forEach(el=>{
+    document.querySelectorAll('.magnetic').forEach(el=>{
       let raf = null;
       const strength = 22;
       el.addEventListener('mousemove', (e)=>{
@@ -244,8 +252,8 @@
     const strength = isTouch ? 0 : 1;
 
     window.addEventListener('mousemove', (e)=>{
-      mouse.x = (e.clientX / window.innerWidth - .5) * 2;
-      mouse.y = (e.clientY / window.innerHeight - .5) * 2;
+      mouse.x = (e.clientX / innerWidth - .5) * 2;
+      mouse.y = (e.clientY / innerHeight - .5) * 2;
     }, {passive:true});
 
     const loop = () => {
@@ -254,7 +262,7 @@
         const depth = parseFloat(el.dataset.parallax) || 0;
         const mx = mouse.x * depth * 120 * strength;
         const my = mouse.y * depth * 120 * strength;
-        const yy = -sy * depth * 0.4;
+        const yy = -sy * depth * .4;
         el.style.transform = `translate3d(${mx}px, ${my + yy}px, 0)`;
       });
       requestAnimationFrame(loop);
@@ -268,9 +276,8 @@
     if(!bar) return;
     let ticking = false;
     const update = () => {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      const p = h > 0 ? (window.scrollY / h) * 100 : 0;
-      bar.style.width = p + '%';
+      const h = document.documentElement.scrollHeight - innerHeight;
+      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
       ticking = false;
     };
     window.addEventListener('scroll', ()=>{
@@ -279,23 +286,19 @@
     update();
   }
 
-  /* ---------- Word-by-word reveal ---------- */
+  /* ---------- Word reveal ---------- */
   function splitWordsIntoSpans(root){
     if(!(root instanceof Element)) return;
-    if(root.dataset.split === '1'){
-      const existing = root.querySelectorAll('.word');
-      if(existing.length) return;
-    }
+    if(root.dataset.split === '1' && root.querySelectorAll('.word').length) return;
     const text = root.textContent.trim();
     if(!text) return;
     root.textContent = '';
-    const words = text.split(/\s+/);
-    words.forEach((w, i)=>{
+    text.split(/\s+/).forEach((w, i, arr)=>{
       const span = document.createElement('span');
       span.className = 'word';
       span.textContent = w;
       root.appendChild(span);
-      if(i < words.length - 1) root.appendChild(document.createTextNode(' '));
+      if(i < arr.length - 1) root.appendChild(document.createTextNode(' '));
     });
     root.dataset.split = '1';
   }
@@ -311,18 +314,16 @@
       entries.forEach(entry=>{
         if(!entry.isIntersecting) return;
         const el = entry.target;
-        const words = el.querySelectorAll('.word');
-        words.forEach((w, i)=>{
+        el.querySelectorAll('.word').forEach((w, i)=>{
           setTimeout(()=> w.classList.add('is-on'), i * 55);
         });
         wordObserver.unobserve(el);
       });
     }, {threshold:0.25});
-
     groups.forEach(el => wordObserver.observe(el));
   }
 
-  /* ---------- Generic scroll animations ---------- */
+  /* ---------- Scroll anims (heads + tags) ---------- */
   function initScrollAnimations(){
     const headIO = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
@@ -337,8 +338,7 @@
     const tagIO = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
         if(entry.isIntersecting){
-          const lis = entry.target.querySelectorAll('li');
-          lis.forEach((li,i)=> setTimeout(()=> li.classList.add('is-on'), i * 140));
+          entry.target.querySelectorAll('li').forEach((li,i)=> setTimeout(()=> li.classList.add('is-on'), i * 140));
           tagIO.unobserve(entry.target);
         }
       });
@@ -351,9 +351,7 @@
     const projects = document.querySelectorAll('[data-project]');
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-on');
-        }
+        if(entry.isIntersecting) entry.target.classList.add('is-on');
       });
     }, {threshold:0.22});
     projects.forEach(p => io.observe(p));
@@ -363,7 +361,7 @@
       const update = () => {
         projects.forEach(p=>{
           const rect = p.getBoundingClientRect();
-          const vh = window.innerHeight;
+          const vh = innerHeight;
           const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
           const media = p.querySelector('[data-project-media]');
           if(media){
@@ -383,8 +381,7 @@
 
   /* ---------- Skills ---------- */
   function initSkills(){
-    const lists = document.querySelectorAll('[data-skills-list]');
-    lists.forEach(list=>{
+    document.querySelectorAll('[data-skills-list]').forEach(list=>{
       const items = list.querySelectorAll('.skill');
       const io = new IntersectionObserver((entries)=>{
         entries.forEach(entry=>{
@@ -400,26 +397,21 @@
 
     const preview = document.getElementById('skillPreview');
     const previewText = document.getElementById('skillPreviewText');
-    const skills = document.querySelectorAll('.skill');
+    if(!preview) return;
 
     let px = 0, py = 0, cx = 0, cy = 0;
-
-    window.addEventListener('mousemove', (e)=>{
-      px = e.clientX; py = e.clientY;
-    }, {passive:true});
+    window.addEventListener('mousemove', (e)=>{ px = e.clientX; py = e.clientY; }, {passive:true});
 
     const loop = () => {
-      cx += (px - cx) * 0.18;
-      cy += (py - cy) * 0.18;
-      if(preview){
-        preview.style.left = cx + 'px';
-        preview.style.top  = cy + 'px';
-      }
+      cx += (px - cx) * .18;
+      cy += (py - cy) * .18;
+      preview.style.left = cx + 'px';
+      preview.style.top  = cy + 'px';
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
 
-    skills.forEach(skill=>{
+    document.querySelectorAll('.skill').forEach(skill=>{
       skill.addEventListener('mouseenter', ()=>{
         const name = skill.querySelector('.skill__name')?.textContent || '';
         const kind = skill.classList.contains('skill--3d') ? '3d'
@@ -428,38 +420,33 @@
         previewText.textContent = name;
         preview.classList.add('is-on');
       });
-      skill.addEventListener('mouseleave', ()=>{
-        preview.classList.remove('is-on');
-      });
+      preview && skill.addEventListener('mouseleave', ()=> preview.classList.remove('is-on'));
     });
   }
 
   /* ---------- Spotify ---------- */
-  let spotifyController = null;
+  const SPOTIFY_DEFAULT = 'spotify:playlist:37i9dQZF1DWWQRwui0ExPn'; // Lo-Fi Beats
+
+  let gateController = null;
+  let miniController = null;
   let spotifyApiReady = false;
-  let pendingSpotifyUri = null;
+  let pendingGateUri = null;
+  let gateMounted = false;
+  let entered = false; // user has crossed the gate
 
   window.onSpotifyIframeApiReady = (IFrameAPI) => {
     spotifyApiReady = true;
     window.__spotifyIFrameAPI = IFrameAPI;
-    if (pendingSpotifyUri) {
-      mountSpotifyController(pendingSpotifyUri);
-      pendingSpotifyUri = null;
+    if (pendingGateUri) {
+      mountGatePlayer(pendingGateUri);
+      pendingGateUri = null;
     }
   };
 
-  /* Accepts:
-     - spotify:track:ID / album / playlist / episode / show / artist
-     - https://open.spotify.com/track/ID
-     - https://open.spotify.com/intl-ar/track/ID   (and any intl-xx)
-     - any of the above with ?si=... query params (ignored)
-     - trailing slashes, extra segments after the id (ignored)
-  */
+  /* URL normalization */
   function normalizeSpotifyUrl(raw){
     if (!raw) return null;
     const s = raw.trim();
-
-    // Already a spotify: URI?
     if (s.startsWith('spotify:')) {
       const parts = s.split(':');
       const allowed = ['track','album','playlist','episode','show','artist'];
@@ -468,45 +455,34 @@
       }
       return null;
     }
-
     try {
-      // Add https:// if user typed "open.spotify.com/..."
       const withProto = /^https?:\/\//i.test(s) ? s : `https://${s}`;
       const u = new URL(withProto);
-
       if (!/(^|\.)spotify\.com$/i.test(u.hostname)) return null;
-
-      // Split path, drop empties and any "intl-xx" locale segments
       let parts = u.pathname.split('/').filter(Boolean);
       parts = parts.filter(p => !/^intl-[a-z]{2}$/i.test(p));
-
       if (parts.length < 2) return null;
-
       const [kind, id] = parts;
       const allowed = ['track','album','playlist','episode','show','artist'];
       if (!allowed.includes(kind)) return null;
       if (!id || id.length < 10) return null;
-
-      // Strip any trailing characters that aren't part of an ID (safety)
       const cleanId = id.split('?')[0].split('#')[0];
-
       return `spotify:${kind}:${cleanId}`;
-    } catch(_) {
-      return null;
-    }
+    } catch(_) { return null; }
   }
 
-  function mountSpotifyController(uri){
-    const host = document.getElementById('spotifyEmbed');
-    const wrap = document.getElementById('spotifyPlayerWrap');
+  /* Mount a controller inside the gate */
+  function mountGatePlayer(uri){
+    const host = document.getElementById('gateEmbed');
+    const wrap = document.getElementById('gatePlayerWrap');
     if (!host || !wrap) return;
 
     wrap.hidden = false;
+    gateMounted = true;
 
-    // If we already have a controller, swap the entity
-    if (spotifyController) {
-      spotifyController.loadEntity(uri);
-      spotifyController.play();
+    // If already created once, reuse
+    if (gateController) {
+      gateController.loadEntity(uri);
       return;
     }
 
@@ -514,19 +490,145 @@
     const IFrameAPI = window.__spotifyIFrameAPI;
     if (!IFrameAPI) return;
 
-    const options = { uri, width: '100%', height: 152 };
-    IFrameAPI.createController(host, options, (controller) => {
-      spotifyController = controller;
+    IFrameAPI.createController(host, { uri, width:'100%', height:152 }, (controller)=>{
+      gateController = controller;
+
+      // Once the user starts playback, move to mini player and reveal the site
+      controller.addListener('playback_started', () => {
+        revealSiteFromGate(uri);
+      });
+    });
+  }
+
+  /* The gate closes; player moves to mini player and keeps playing */
+  function revealSiteFromGate(uri){
+    if (entered) return;
+    entered = true;
+
+    // 1) Close the gate visually
+    document.body.classList.remove('is-gate');
+
+    // 2) Create a parallel mini-controller so the player keeps playing without being tied to gate DOM
+    // NOTE: Spotify iFrame API can only have one controller per DOM element. The simplest approach
+    // is to keep the same iframe by *moving* the DOM node, not recreating it.
+    moveGateIframeToMini();
+
+    // 3) Remember the choice so it doesn't show again
+    try {
+      localStorage.setItem('jl-gate-passed', '1');
+      localStorage.setItem('jl-last-uri', uri);
+    } catch(e){}
+  }
+
+  /* Moves the actual iframe DOM from #gateEmbed to #miniEmbed without losing playback */
+  function moveGateIframeToMini(){
+    const gateEmbed = document.getElementById('gateEmbed');
+    const miniEmbed = document.getElementById('miniEmbed');
+    const miniPlayer = document.getElementById('miniPlayer');
+    if (!gateEmbed || !miniEmbed) return;
+
+    // The iframe inside gateEmbed is the live player — move it
+    const iframe = gateEmbed.querySelector('iframe');
+    if (iframe) {
+      miniEmbed.appendChild(iframe);
+    }
+
+    // Show mini player with animation
+    miniPlayer.setAttribute('aria-hidden', 'false');
+    miniPlayer.classList.add('is-on');
+  }
+
+  /* Skip gate -> just close it */
+  function skipGate(){
+    if (entered) return;
+    entered = true;
+    document.body.classList.remove('is-gate');
+    try { localStorage.setItem('jl-gate-passed', '1'); } catch(e){}
+  }
+
+  /* Simple mount for the in-page Spotify section (independent from gate) */
+  function mountSpotifySection(uri){
+    const host = document.getElementById('spotifyEmbed');
+    const wrap = document.getElementById('spotifyPlayerWrap');
+    if (!host || !wrap) return;
+
+    wrap.hidden = false;
+    host.innerHTML = '';
+    const IFrameAPI = window.__spotifyIFrameAPI;
+    if (!IFrameAPI) return;
+
+    IFrameAPI.createController(host, { uri, width:'100%', height:152 }, (controller)=>{
       controller.addListener('ready', () => controller.play());
     });
   }
 
+  /* ---------- Spotify init ---------- */
   function initSpotify(){
+    // ---- Gate form ----
+    const gateForm = document.getElementById('gateForm');
+    const gateInput = document.getElementById('gateInput');
+    const gateError = document.getElementById('gateError');
+    const gateSkip = document.getElementById('gateSkip');
+
+    const showGateError = (msg) => {
+      if (!gateError) return;
+      gateError.textContent = msg;
+      gateError.classList.toggle('is-on', !!msg);
+    };
+
+    // If user previously passed the gate, skip it entirely
+    let passed = false;
+    try { passed = localStorage.getItem('jl-gate-passed') === '1'; } catch(e){}
+    if (passed) {
+      entered = true;
+      document.body.classList.remove('is-gate');
+    } else {
+      document.body.classList.add('is-gate');
+    }
+
+    // Pre-mount default playlist as soon as SDK is ready
+    const preMount = () => {
+      if (!passed) {
+        if (spotifyApiReady) mountGatePlayer(SPOTIFY_DEFAULT);
+        else pendingGateUri = SPOTIFY_DEFAULT;
+      }
+    };
+    if (spotifyApiReady) preMount();
+    else setTimeout(()=>{
+      // wait a tick for SDK
+      if (spotifyApiReady) preMount();
+      else pendingGateUri = SPOTIFY_DEFAULT;
+    }, 400);
+
+    gateForm?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const uri = normalizeSpotifyUrl(gateInput.value);
+      if (!uri) {
+        showGateError(translations[document.documentElement.lang]['gate.error']);
+        return;
+      }
+      showGateError('');
+      if (!spotifyApiReady) { pendingGateUri = uri; return; }
+      mountGatePlayer(uri);
+    });
+
+    gateInput?.addEventListener('paste', ()=> setTimeout(()=> gateForm.requestSubmit(), 0));
+    gateSkip?.addEventListener('click', skipGate);
+
+    // ---- Mini player close ----
+    const miniClose = document.getElementById('miniClose');
+    const miniPlayer = document.getElementById('miniPlayer');
+    miniClose?.addEventListener('click', ()=>{
+      miniPlayer?.classList.remove('is-on');
+      miniPlayer?.setAttribute('aria-hidden', 'true');
+    });
+
+    // ---- In-page Spotify section ----
     const form = document.getElementById('spotifyForm');
     const input = document.getElementById('spotifyInput');
     const errorEl = document.getElementById('spotifyError');
     const closeBtn = document.getElementById('spotifyClose');
-    const wrap = document.getElementById('spotifyPlayerWrap');
+    const wrapSec = document.getElementById('spotifyPlayerWrap');
     if (!form) return;
 
     const showError = (msg) => {
@@ -534,7 +636,7 @@
       errorEl.classList.toggle('is-on', !!msg);
     };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', (e)=>{
       e.preventDefault();
       const uri = normalizeSpotifyUrl(input.value);
       if (!uri) {
@@ -542,22 +644,15 @@
         return;
       }
       showError('');
-      if (!spotifyApiReady) {
-        pendingSpotifyUri = uri;
-        return;
-      }
-      mountSpotifyController(uri);
+      if (!spotifyApiReady) return;
+      mountSpotifySection(uri);
     });
 
-    closeBtn?.addEventListener('click', () => {
-      if (spotifyController) spotifyController.pause();
-      wrap.hidden = true;
+    closeBtn?.addEventListener('click', ()=>{
+      wrapSec.hidden = true;
     });
 
-    // Auto-submit after paste for a smoother experience
-    input?.addEventListener('paste', () => {
-      setTimeout(() => form.requestSubmit(), 0);
-    });
+    input?.addEventListener('paste', ()=> setTimeout(()=> form.requestSubmit(), 0));
   }
 
   /* ---------- Language toggle ---------- */
@@ -566,14 +661,13 @@
     let current = document.documentElement.lang || 'ar';
     try { current = localStorage.getItem('jl-lang') || current; } catch(e){}
     setLanguage(current);
-
     btn?.addEventListener('click', ()=>{
       const next = document.documentElement.lang === 'ar' ? 'en' : 'ar';
       setLanguage(next);
     });
   }
 
-  /* ---------- Footer year ---------- */
+  /* ---------- Year ---------- */
   function initYear(){
     const y = new Date().getFullYear();
     const a = document.getElementById('year');
@@ -602,6 +696,10 @@
     initSpotify();
     initLanguageToggle();
     initYear();
+
+    // After the loader is done, the gate becomes interactive
+    // (the .is-ready class is added to body via CSS transitions on hero)
+    setTimeout(()=> document.body.classList.add('is-ready'), prefersReduced ? 0 : 1200);
   }
 
   if(document.readyState === 'loading'){
