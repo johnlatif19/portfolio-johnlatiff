@@ -17,8 +17,8 @@
       'hero.para':'أصمم تجارب ويب تفاعلية وتطبيقات واقعية تركز على الأداء وسهولة الاستخدام.',
       'hero.ctaWork':'شوف أعمالي','hero.ctaContact':'تواصل معي','hero.scroll':'اسكرول',
       'gate.skip':'تخطَّ','gate.kicker':'قبل ما تدخل',
-      'gate.title':'اختار حاجة تسمعها وإنت بتتصفح.',
-      'gate.sub':'شغّل أي حاجة من Spotify وهنخليها في الكورنر وإنت بتتصفح. أو دوس تخطَّ.',
+      'gate.title':'حط لينك أغنية من Spotify.',
+      'gate.sub':'الصق لينك أي أغنية أو ألبوم من Spotify، شغّلها، وهنخليها معاك وإنت بتتصفح. أو دوس تخطَّ.',
       'gate.load':'شغّل',
       'gate.hint':'دوس play جوه المشغل وابدأ رحلتك.',
       'gate.error':'الرابط مش صحيح. لازم يكون رابط Spotify.',
@@ -54,8 +54,8 @@
       'hero.para':'I build interactive web experiences and real-world applications focused on performance and usability.',
       'hero.ctaWork':'View my work','hero.ctaContact':'Get in touch','hero.scroll':'Scroll',
       'gate.skip':'Skip','gate.kicker':'Before you enter',
-      'gate.title':'Pick something to play while you browse.',
-      'gate.sub':'Load any Spotify track and we\'ll keep it in the corner while you scroll. Or hit skip.',
+      'gate.title':'Paste a Spotify link.',
+      'gate.sub':'Paste any Spotify track or album, hit play, and we\'ll keep it with you while you browse. Or hit skip.',
       'gate.load':'Play',
       'gate.hint':'Hit play inside the player and start your journey.',
       'gate.error':'Invalid link. Must be a Spotify URL.',
@@ -102,16 +102,13 @@
 
   /* ---------- Loader ---------- */
   function initLoader(){
-    // Hide the JL loader after a short beat
-    const done = () => {
-      document.body.classList.remove('is-loading');
-    };
+    const done = () => document.body.classList.remove('is-loading');
     if (document.readyState === 'complete') {
       setTimeout(done, prefersReduced ? 0 : 1200);
     } else {
       window.addEventListener('load', ()=> setTimeout(done, prefersReduced ? 0 : 1200));
     }
-    setTimeout(done, 2600); // safety fallback
+    setTimeout(done, 2600);
   }
 
   /* ---------- Cursor ---------- */
@@ -425,14 +422,10 @@
   }
 
   /* ---------- Spotify ---------- */
-  const SPOTIFY_DEFAULT = 'spotify:playlist:37i9dQZF1DWWQRwui0ExPn'; // Lo-Fi Beats
-
   let gateController = null;
-  let miniController = null;
   let spotifyApiReady = false;
   let pendingGateUri = null;
-  let gateMounted = false;
-  let entered = false; // user has crossed the gate
+  let entered = false;
 
   window.onSpotifyIframeApiReady = (IFrameAPI) => {
     spotifyApiReady = true;
@@ -471,16 +464,14 @@
     } catch(_) { return null; }
   }
 
-  /* Mount a controller inside the gate */
+  /* Mount controller inside gate */
   function mountGatePlayer(uri){
     const host = document.getElementById('gateEmbed');
     const wrap = document.getElementById('gatePlayerWrap');
     if (!host || !wrap) return;
 
     wrap.hidden = false;
-    gateMounted = true;
 
-    // If already created once, reuse
     if (gateController) {
       gateController.loadEntity(uri);
       return;
@@ -492,53 +483,41 @@
 
     IFrameAPI.createController(host, { uri, width:'100%', height:152 }, (controller)=>{
       gateController = controller;
-
-      // Once the user starts playback, move to mini player and reveal the site
       controller.addListener('playback_started', () => {
         revealSiteFromGate(uri);
       });
     });
   }
 
-  /* The gate closes; player moves to mini player and keeps playing */
+  /* Gate closes; player keeps playing inside a floating mini player */
   function revealSiteFromGate(uri){
     if (entered) return;
     entered = true;
 
-    // 1) Close the gate visually
     document.body.classList.remove('is-gate');
-
-    // 2) Create a parallel mini-controller so the player keeps playing without being tied to gate DOM
-    // NOTE: Spotify iFrame API can only have one controller per DOM element. The simplest approach
-    // is to keep the same iframe by *moving* the DOM node, not recreating it.
     moveGateIframeToMini();
 
-    // 3) Remember the choice so it doesn't show again
     try {
       localStorage.setItem('jl-gate-passed', '1');
       localStorage.setItem('jl-last-uri', uri);
     } catch(e){}
   }
 
-  /* Moves the actual iframe DOM from #gateEmbed to #miniEmbed without losing playback */
+  /* Move the live iframe to the mini player without losing playback */
   function moveGateIframeToMini(){
     const gateEmbed = document.getElementById('gateEmbed');
     const miniEmbed = document.getElementById('miniEmbed');
     const miniPlayer = document.getElementById('miniPlayer');
-    if (!gateEmbed || !miniEmbed) return;
+    if (!gateEmbed || !miniEmbed || !miniPlayer) return;
 
-    // The iframe inside gateEmbed is the live player — move it
     const iframe = gateEmbed.querySelector('iframe');
-    if (iframe) {
-      miniEmbed.appendChild(iframe);
-    }
+    if (iframe) miniEmbed.appendChild(iframe);
 
-    // Show mini player with animation
     miniPlayer.setAttribute('aria-hidden', 'false');
     miniPlayer.classList.add('is-on');
   }
 
-  /* Skip gate -> just close it */
+  /* Skip -> just close the gate */
   function skipGate(){
     if (entered) return;
     entered = true;
@@ -546,7 +525,7 @@
     try { localStorage.setItem('jl-gate-passed', '1'); } catch(e){}
   }
 
-  /* Simple mount for the in-page Spotify section (independent from gate) */
+  /* Independent mount for the in-page Spotify section */
   function mountSpotifySection(uri){
     const host = document.getElementById('spotifyEmbed');
     const wrap = document.getElementById('spotifyPlayerWrap');
@@ -576,7 +555,7 @@
       gateError.classList.toggle('is-on', !!msg);
     };
 
-    // If user previously passed the gate, skip it entirely
+    // If user already passed the gate before, skip it entirely
     let passed = false;
     try { passed = localStorage.getItem('jl-gate-passed') === '1'; } catch(e){}
     if (passed) {
@@ -585,20 +564,6 @@
     } else {
       document.body.classList.add('is-gate');
     }
-
-    // Pre-mount default playlist as soon as SDK is ready
-    const preMount = () => {
-      if (!passed) {
-        if (spotifyApiReady) mountGatePlayer(SPOTIFY_DEFAULT);
-        else pendingGateUri = SPOTIFY_DEFAULT;
-      }
-    };
-    if (spotifyApiReady) preMount();
-    else setTimeout(()=>{
-      // wait a tick for SDK
-      if (spotifyApiReady) preMount();
-      else pendingGateUri = SPOTIFY_DEFAULT;
-    }, 400);
 
     gateForm?.addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -648,10 +613,7 @@
       mountSpotifySection(uri);
     });
 
-    closeBtn?.addEventListener('click', ()=>{
-      wrapSec.hidden = true;
-    });
-
+    closeBtn?.addEventListener('click', ()=>{ wrapSec.hidden = true; });
     input?.addEventListener('paste', ()=> setTimeout(()=> form.requestSubmit(), 0));
   }
 
@@ -697,8 +659,6 @@
     initLanguageToggle();
     initYear();
 
-    // After the loader is done, the gate becomes interactive
-    // (the .is-ready class is added to body via CSS transitions on hero)
     setTimeout(()=> document.body.classList.add('is-ready'), prefersReduced ? 0 : 1200);
   }
 
