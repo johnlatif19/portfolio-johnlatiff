@@ -283,7 +283,6 @@
   function splitWordsIntoSpans(root){
     if(!(root instanceof Element)) return;
     if(root.dataset.split === '1'){
-      // already split — just unwrap existing spans
       const existing = root.querySelectorAll('.word');
       if(existing.length) return;
     }
@@ -449,20 +448,49 @@
     }
   };
 
+  /* Accepts:
+     - spotify:track:ID / album / playlist / episode / show / artist
+     - https://open.spotify.com/track/ID
+     - https://open.spotify.com/intl-ar/track/ID   (and any intl-xx)
+     - any of the above with ?si=... query params (ignored)
+     - trailing slashes, extra segments after the id (ignored)
+  */
   function normalizeSpotifyUrl(raw){
     if (!raw) return null;
-    let s = raw.trim();
-    if (s.startsWith('spotify:')) return s;
+    const s = raw.trim();
+
+    // Already a spotify: URI?
+    if (s.startsWith('spotify:')) {
+      const parts = s.split(':');
+      const allowed = ['track','album','playlist','episode','show','artist'];
+      if (parts.length >= 3 && parts[0] === 'spotify' && allowed.includes(parts[1]) && parts[2]) {
+        return `spotify:${parts[1]}:${parts[2]}`;
+      }
+      return null;
+    }
+
     try {
-      const u = new URL(s);
-      if (!/(^|\.)spotify\.com$/.test(u.hostname)) return null;
-      const parts = u.pathname.split('/').filter(Boolean);
+      // Add https:// if user typed "open.spotify.com/..."
+      const withProto = /^https?:\/\//i.test(s) ? s : `https://${s}`;
+      const u = new URL(withProto);
+
+      if (!/(^|\.)spotify\.com$/i.test(u.hostname)) return null;
+
+      // Split path, drop empties and any "intl-xx" locale segments
+      let parts = u.pathname.split('/').filter(Boolean);
+      parts = parts.filter(p => !/^intl-[a-z]{2}$/i.test(p));
+
       if (parts.length < 2) return null;
+
       const [kind, id] = parts;
       const allowed = ['track','album','playlist','episode','show','artist'];
       if (!allowed.includes(kind)) return null;
       if (!id || id.length < 10) return null;
-      return `spotify:${kind}:${id}`;
+
+      // Strip any trailing characters that aren't part of an ID (safety)
+      const cleanId = id.split('?')[0].split('#')[0];
+
+      return `spotify:${kind}:${cleanId}`;
     } catch(_) {
       return null;
     }
@@ -475,6 +503,7 @@
 
     wrap.hidden = false;
 
+    // If we already have a controller, swap the entity
     if (spotifyController) {
       spotifyController.loadEntity(uri);
       spotifyController.play();
@@ -525,6 +554,7 @@
       wrap.hidden = true;
     });
 
+    // Auto-submit after paste for a smoother experience
     input?.addEventListener('paste', () => {
       setTimeout(() => form.requestSubmit(), 0);
     });
