@@ -1,14 +1,9 @@
-/* =========================================================
-   John Latif — Portfolio
-   Vanilla JS · no framework
-   ========================================================= */
 (() => {
   'use strict';
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
 
-  /* ---------- i18n ---------- */
   const translations = {
     ar: {
       'nav.home':'الرئيسية','nav.about':'عني','nav.work':'أعمالي','nav.skills':'مهاراتي','nav.spotify':'موسيقى','nav.contact':'تواصل معي',
@@ -26,8 +21,6 @@
       'about.text':'أنا شخص طموح وشغوف بالتعلّم والتطوير المستمر، وأسعى دائمًا إلى اكتساب مهارات جديدة وتحويل المعرفة إلى تطبيق عملي. أحب التفكير بطريقة مختلفة، الاهتمام بالتفاصيل، وتطوير الأفكار للوصول إلى نتائج أفضل. أؤمن بأهمية التطور المستمر، وأحرص على أن يكون لكل مشروع أعمل عليه قيمة حقيقية تعكس مهاراتي وشغفي بما أقدمه.',
       'about.tag1':'Web Design','about.tag2':'بناء الهياكل','about.tag3':'تجارب تفاعلية',
       'work.title':'أعمالي','work.sub':'مجموعة من المشاريع التي تعرض مهاراتي وأسلوبي في التطوير',
-      'work.p1.title':'شولميث جاليري',
-      'work.p1.desc':'منصة فنية لعرض وبيع اللوحات الفنية، مع إمكانية تنفيذ أي تابلوه بخامات وأحجام مختلفة حسب طلب العميل، وتقديم استشارات فنية مجانية.',
       'work.p2.title':'نظام نقاط لصيدلية د. ميرنا',
       'work.p2.desc':'نظام متكامل لإدارة نقاط الولاء لعملاء صيدلية د. ميرنا، يتيح جمع النقاط مع كل عملية شراء واستبدالها بمكافآت وعروض حصرية.',
       'work.p3.title':'نظام تسجيل الدخول',
@@ -63,8 +56,6 @@
       'about.text':"I'm an ambitious developer passionate about continuous learning and growth, always striving to gain new skills and turn knowledge into practice. I like thinking differently, obsessing over details, and pushing ideas further. I believe in constant evolution, and I make sure every project I work on carries real value that reflects my skills and passion.",
       'about.tag1':'Web Design','about.tag2':'Architecture','about.tag3':'Interactive experiences',
       'work.title':'Work','work.sub':'A selection of projects that showcase my skills and approach to development',
-      'work.p1.title':'Shulamith Gallery',
-      'work.p1.desc':'An art platform for showcasing and selling paintings, with custom canvas execution in different materials and sizes, plus free art consultations.',
       'work.p2.title':'Dr. Mirna Loyalty Points',
       'work.p2.desc':'A complete loyalty-points system for Dr. Mirna Pharmacy, allowing customers to collect points on every purchase and redeem them for exclusive rewards.',
       'work.p3.title':'Login System',
@@ -100,7 +91,6 @@
     observeWordReveals();
   }
 
-  /* ---------- Loader ---------- */
   function initLoader(){
     const done = () => document.body.classList.remove('is-loading');
     if (document.readyState === 'complete') {
@@ -111,7 +101,6 @@
     setTimeout(done, 2600);
   }
 
-  /* ---------- Cursor ---------- */
   function initCursor(){
     if(isTouch) return;
     const cursor = document.getElementById('cursor');
@@ -157,7 +146,6 @@
     window.addEventListener('mouseup',   ()=> cursor.classList.remove('is-down'));
   }
 
-  /* ---------- Navigation ---------- */
   function initNavigation(){
     const nav = document.getElementById('nav');
     const indicator = document.getElementById('navIndicator');
@@ -218,7 +206,6 @@
     });
   }
 
-  /* ---------- Magnetic ---------- */
   function initMagnetic(){
     if(isTouch || prefersReduced) return;
     document.querySelectorAll('.magnetic').forEach(el=>{
@@ -240,7 +227,6 @@
     });
   }
 
-  /* ---------- Parallax ---------- */
   function initParallax(){
     if(prefersReduced) return;
     const items = document.querySelectorAll('[data-parallax]');
@@ -267,7 +253,6 @@
     if(!isTouch) requestAnimationFrame(loop);
   }
 
-  /* ---------- Scroll progress ---------- */
   function initScrollProgress(){
     const bar = document.getElementById('scrollBar');
     if(!bar) return;
@@ -283,7 +268,6 @@
     update();
   }
 
-  /* ---------- Word reveal ---------- */
   function splitWordsIntoSpans(root){
     if(!(root instanceof Element)) return;
     if(root.dataset.split === '1' && root.querySelectorAll('.word').length) return;
@@ -320,7 +304,6 @@
     groups.forEach(el => wordObserver.observe(el));
   }
 
-  /* ---------- Scroll anims (heads + tags) ---------- */
   function initScrollAnimations(){
     const headIO = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
@@ -343,7 +326,6 @@
     document.querySelectorAll('.about__tags').forEach(el => tagIO.observe(el));
   }
 
-  /* ---------- Projects ---------- */
   function initProjectAnimations(){
     const projects = document.querySelectorAll('[data-project]');
     const io = new IntersectionObserver((entries)=>{
@@ -376,7 +358,6 @@
     }
   }
 
-  /* ---------- Skills ---------- */
   function initSkills(){
     document.querySelectorAll('[data-skills-list]').forEach(list=>{
       const items = list.querySelectorAll('.skill');
@@ -421,7 +402,6 @@
     });
   }
 
-  /* ---------- Spotify ---------- */
   let gateController = null;
   let spotifyApiReady = false;
   let pendingGateUri = null;
@@ -470,7 +450,6 @@
 
     wrap.hidden = false;
 
-    // Reuse the controller if we already created one (no DOM move, no cut)
     if (gateController) {
       gateController.loadEntity(uri);
       return;
@@ -483,8 +462,6 @@
     IFrameAPI.createController(host, { uri, width:'100%', height:152 }, (controller)=>{
       gateController = controller;
 
-      // When the user actually starts playback, collapse gate into mini player.
-      // The iframe stays in place — only CSS changes.
       controller.addListener('playback_started', () => {
         revealSiteFromGate(uri);
       });
@@ -569,13 +546,11 @@
     gateInput?.addEventListener('paste', ()=> setTimeout(()=> gateForm.requestSubmit(), 0));
     gateSkip?.addEventListener('click', skipGate);
 
-    // Close button only appears in mini mode
     gateClose?.addEventListener('click', ()=>{
       const gate = document.getElementById('gate');
       if (gate) gate.style.display = 'none';
     });
 
-    // In-page Spotify section
     const form = document.getElementById('spotifyForm');
     const input = document.getElementById('spotifyInput');
     const errorEl = document.getElementById('spotifyError');
@@ -604,7 +579,6 @@
     input?.addEventListener('paste', ()=> setTimeout(()=> form.requestSubmit(), 0));
   }
 
-  /* ---------- Language toggle ---------- */
   function initLanguageToggle(){
     const btn = document.getElementById('langToggle');
     let current = document.documentElement.lang || 'ar';
@@ -616,7 +590,6 @@
     });
   }
 
-  /* ---------- Year ---------- */
   function initYear(){
     const y = new Date().getFullYear();
     const a = document.getElementById('year');
@@ -625,7 +598,6 @@
     if(b) b.textContent = y;
   }
 
-  /* ---------- INIT ---------- */
   function init(){
     initLoader();
     initCursor();
