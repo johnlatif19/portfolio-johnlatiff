@@ -14,7 +14,6 @@
 </head>
 <body class="is-loading">
 
-<!-- ===== LOADER ===== -->
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
     <span class="loader__mark" data-text="JL">JL</span>
@@ -22,7 +21,6 @@
   </div>
 </div>
 
-<!-- ===== ENTRY GATE (turns into mini player after play) ===== -->
 <div class="gate" id="gate" aria-hidden="true">
   <button class="gate__skip" id="gateSkip" type="button" aria-label="Skip">
     <span data-i18n="gate.skip">تخطَّ</span>
@@ -74,7 +72,6 @@
   </div>
 </div>
 
-<!-- ===== CUSTOM CURSOR ===== -->
 <div class="cursor" id="cursor" aria-hidden="true">
   <div class="cursor__dot"></div>
   <div class="cursor__ring">
@@ -82,12 +79,10 @@
   </div>
 </div>
 
-<!-- ===== SCROLL PROGRESS ===== -->
 <div class="scroll-progress" aria-hidden="true">
   <div class="scroll-progress__bar" id="scrollBar"></div>
 </div>
 
-<!-- ===== NAV ===== -->
 <header class="nav" id="nav">
   <a href="#home" class="nav__brand" aria-label="John Latif">
     <span class="nav__brand-mark">JL</span>
@@ -116,7 +111,6 @@
   </div>
 </header>
 
-<!-- ===== MOBILE MENU ===== -->
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <nav>
     <a href="#home" data-nav="home"><span data-i18n="nav.home">الرئيسية</span></a>
@@ -134,7 +128,6 @@
 
 <main>
 
-<!-- ===== HERO ===== -->
 <section class="hero" id="home">
   <div class="hero__bg" aria-hidden="true">
     <div class="hero__bg-blob" data-parallax="0.06"></div>
@@ -202,7 +195,6 @@
   </div>
 </section>
 
-<!-- ===== MARQUEE ===== -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee__track">
     <span>FRONT-END ✦ WEB DEVELOPER ✦ REACT ✦ TYPESCRIPT ✦ THREE.JS ✦ INTERACTIVE ✦</span>
@@ -210,7 +202,6 @@
   </div>
 </div>
 
-<!-- ===== ABOUT ===== -->
 <section class="about" id="about">
   <div class="section-head">
     <span class="section-head__index">01</span>
@@ -231,7 +222,6 @@
   </div>
 </section>
 
-<!-- ===== WORK ===== -->
 <section class="work" id="work">
   <div class="section-head">
     <span class="section-head__index">02</span>
@@ -246,38 +236,13 @@
       <div class="project__sticky">
         <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
           <div class="project__media-inner">
-            <img src="https://i.postimg.cc/B6Tz00JP/shulamith-gallery.jpg" alt="شولميث جاليري" loading="lazy" />
-          </div>
-          <div class="project__media-reveal"></div>
-        </div>
-
-        <div class="project__info">
-          <span class="project__num" data-project-num>01</span>
-          <h3 class="project__title" data-project-title data-i18n="work.p1.title">شولميث جاليري</h3>
-          <p class="project__desc" data-project-desc data-i18n="work.p1.desc">
-            منصة فنية لعرض وبيع اللوحات الفنية، مع إمكانية تنفيذ أي تابلوه بخامات وأحجام مختلفة حسب طلب العميل، وتقديم استشارات فنية مجانية.
-          </p>
-          <ul class="project__stack" data-project-stack>
-            <li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>Express</li>
-          </ul>
-          <a href="https://shulamith-gallery.vercel.app/" target="_blank" rel="noopener" class="project__link magnetic" data-cursor="link" data-i18n="work.live">
-            Live Demo ↗
-          </a>
-        </div>
-      </div>
-    </article>
-
-    <article class="project project--alt" data-project>
-      <div class="project__sticky">
-        <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
-          <div class="project__media-inner">
             <img src="https://i.postimg.cc/mrMXYszD/points-dr-mirna.jpg" alt="نظام نقاط لصيدلية د. ميرنا" loading="lazy" />
           </div>
           <div class="project__media-reveal"></div>
         </div>
 
         <div class="project__info">
-          <span class="project__num" data-project-num>02</span>
+          <span class="project__num" data-project-num>01</span>
           <h3 class="project__title" data-project-title data-i18n="work.p2.title">نظام نقاط لصيدلية د. ميرنا</h3>
           <p class="project__desc" data-project-desc data-i18n="work.p2.desc">
             نظام متكامل لإدارة نقاط الولاء لعملاء صيدلية د. ميرنا، يتيح جمع النقاط مع كل عملية شراء واستبدالها بمكافآت وعروض حصرية.
@@ -292,7 +257,7 @@
       </div>
     </article>
 
-    <article class="project" data-project>
+    <article class="project project--alt" data-project>
       <div class="project__sticky">
         <div class="project__media" data-project-media data-cursor="view" data-cursor-label="VIEW">
           <div class="project__media-inner">
@@ -302,7 +267,7 @@
         </div>
 
         <div class="project__info">
-          <span class="project__num" data-project-num>03</span>
+          <span class="project__num" data-project-num>02</span>
           <h3 class="project__title" data-project-title data-i18n="work.p3.title">نظام تسجيل الدخول</h3>
           <p class="project__desc" data-project-desc data-i18n="work.p3.desc">
             نظام تسجيل دخول تجريبي بسيط وآمن مع واجهة مستخدم نظيفة، يتيح للمستخدمين تسجيل الدخول باستخدام اسم المستخدم وكلمة المرور.
@@ -320,7 +285,6 @@
   </div>
 </section>
 
-<!-- ===== SKILLS ===== -->
 <section class="skills" id="skills">
   <div class="section-head">
     <span class="section-head__index">03</span>
@@ -362,7 +326,6 @@
   </div>
 </section>
 
-<!-- ===== SPOTIFY ===== -->
 <section class="spotify" id="spotify">
   <div class="section-head">
     <span class="section-head__index">04</span>
@@ -406,7 +369,6 @@
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
 <section class="contact" id="contact">
   <div class="contact__headline" data-reveal-words>
     <span data-i18n="contact.headline">خلينا نبني حاجة تستحق إنها تتشاف.</span>
@@ -456,7 +418,6 @@
 
 </main>
 
-<!-- Spotify iFrame API SDK -->
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
 <script src="script.js"></script>
